@@ -1,0 +1,5 @@
+# ignore model file
+resnet50_ft_dag.pth
+
+# ignore ALL files in ANY directory named temp
+temp/
