@@ -46,8 +46,12 @@ Builder.load_string('''
 
 class Main(App):
 
+    metric = nn.L1Loss()
+    users_path = os.path.join(os.getcwd(), 'pictures') 
+
     def build(self):
         self.title = 'Interface com Kivy'
+        self.analisa_banco_imagens(self.users_path, self.metric) 
         threading.Thread(target=self.facedetect, daemon=True).start()
         sm = ScreenManager()
         self.main_screen = MainScreen()
@@ -55,8 +59,6 @@ class Main(App):
         return sm
 
     def facedetect(self):
-        metric = nn.L1Loss()
-        users_path = os.path.join(os.getcwd(), 'pictures') 
         self.do_vid = True
         face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
         cam = cv2.VideoCapture(0)
@@ -69,7 +71,7 @@ class Main(App):
                 minNeighbors=5,
                 minSize=(50, 50)
             )
-            result = self.analisa_nova_imagem(pixels, users_path, metric)
+            result = self.analisa_nova_imagem(pixels, self.users_path, self.metric)
             for (x, y, w, h) in faces:                
                 cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
                 cv2.putText(frame, result, (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36,255,12), 2)
